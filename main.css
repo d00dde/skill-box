@@ -22,12 +22,15 @@
 }
 
 .main-screen {
+  flex-wrap: nowrap;
   margin-top: 20px;
   height: 75%;
 }
 .game-field {
   display: flex;
   flex-wrap: wrap;
+  border: 1px solid black;
+  box-sizing: content-box;
   margin: 0;
   padding: 0;
   height: 100%;
