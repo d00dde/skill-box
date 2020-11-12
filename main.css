@@ -23,12 +23,10 @@
 }
 
 .main-screen {
-  background-color: blue;
   margin-top: 20px;
   height: 75%;
 }
 .game-field {
-  background-color: green;
   display: flex;
   flex-wrap: wrap;
   margin: 0;
@@ -37,7 +35,6 @@
   cursor: pointer;
 }
 .cell {
-  border: 1px solid black;
   font-size: 0.5rem;
   align-items: center;
   text-align: center;
