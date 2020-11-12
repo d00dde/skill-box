@@ -13,21 +13,21 @@ function getRandom(min, max) {
   return Math.round(rand);
 }
 
+let painted = 0;
 createField();
 const cells = document.querySelectorAll('.cell');
-paintRandomCells(true);
+paintRandomCells();
 
 
-function paintRandomCells(start) {
-	const count = start ? 3 : getRandom(0, 2);
+function paintRandomCells() {
+	const count = painted ? getRandom(0, 2) : 3;
 	for(let i = 0; i < count; i++){
 		while(true){
 			const candidate = cells[getRandom(0, cells.length-1)];
 			if(candidate.dataset.status === 'clear'){
-				console.log(candidate);
 				candidate.style.backgroundColor = COLORS[getRandom(0, COLORS.length-1)];
+				painted++;
 				candidate.dataset.status = 'paint';
-				console.log(candidate.dataset.status);
 				break;
 			}
 		}
@@ -35,7 +35,6 @@ function paintRandomCells(start) {
 }
 
 function createField () {
-	console.log('object')
 	const gameField = document.querySelector('.game-field');
 	gameField.innerHTML = '';
 	const style = window.getComputedStyle(gameField);
@@ -59,8 +58,12 @@ function createField () {
 	gameField.onclick = (e) => {
 		if(!e.target.classList.contains('cell'))
 			return;
-		if(!(e.target.dataset.status === 'paint'))
+		const cell = e.target;
+		if(!(cell.dataset.status === 'paint'))
 			return;
+		painted--;
+		cell.dataset.status === 'clear';
+		cell.style.backgroundColor = '';
 		paintRandomCells();
 
 	}
