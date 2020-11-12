@@ -1,6 +1,6 @@
 const ROW_MAX = 30;
 const COL_MAX = 20;
-const COLORS = [ 'red', 'blue' ];
+const COLORS = [ 'red', 'blue'];
 
 function setCSS (css) {
 	const style = document.createElement('style');

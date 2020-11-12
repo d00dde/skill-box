@@ -7,10 +7,9 @@
 }
 .panel {
   height: 20%;
-  background-color: red;
 }
 .controls {
-  background-color: yellow;
+  /*background-color: yellow;*/
 }
 .indicators {
   font-size: 2rem;
