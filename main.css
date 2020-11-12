@@ -1,0 +1,33 @@
+.container {
+  height: 100vh;
+}
+.row {
+  justify-content: space-around;
+  align-items: center;
+}
+.panel {
+  height: 20%;
+  background-color: red;
+}
+.controls {
+  background-color: yellow;
+}
+.indicators {
+  font-size: 2rem;
+}
+.time:before {
+  content: 'Time: ';
+}
+.current-score:before {
+  content: 'Score: ';
+}
+
+.main-screen {
+  background-color: blue;
+  margin-top: 20px;
+  height: 75%;
+}
+.game-field {
+  background-color: green;
+  height: 100%;
+}
