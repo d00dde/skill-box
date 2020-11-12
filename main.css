@@ -16,10 +16,10 @@
   font-size: 2rem;
 }
 .time:before {
-  content: 'Time: ';
+  content: 'Время: ';
 }
 .current-score:before {
-  content: 'Score: ';
+  content: 'Счёт: ';
 }
 
 .main-screen {
@@ -29,5 +29,16 @@
 }
 .game-field {
   background-color: green;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
   height: 100%;
+  cursor: pointer;
+}
+.cell {
+  border: 1px solid black;
+  font-size: 0.5rem;
+  align-items: center;
+  text-align: center;
 }
