@@ -68,7 +68,7 @@ class Game {
 		this.$startBtn.onclick = this.startHandler.bind(this);
 		this.$startBtn.dataset.status = 'play';
 		this.$newGameBtn.onclick = this.newGameHandler.bind(this);
-		scoreTable.init();
+		this.scoreTable.init();
 		this.createField();
 		this.$cells = document.querySelectorAll('.cell');
 	}
