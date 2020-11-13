@@ -14,10 +14,10 @@
 <body>
 	<div class="container">
 		<div class="panel bg-light row">
-			<div class="controls bg-info col-sm-4">
+			<div class="controls col-sm-4">
 				<div class="row bg-light">
-					<button class="start col-sm-4 btn btn-primary" disabled>Пауза</button>
-					<button class="new-game col-sm-4 btn btn-primary">Новая игра</button>
+					<button class="start-btn col-sm-4 btn btn-primary" disabled>Пауза</button>
+					<button class="new-game-btn col-sm-4 btn btn-primary">Новая игра</button>
 				</div>
 			</div>
 			<div class="indicators col-sm-5">
@@ -31,7 +31,9 @@
 			</div>
 		</div>
 		<div class="main-screen row">
-			<div class="game-field bg-white col-sm-9"></div>
+			<div class="game-field bg-white col-sm-9">
+			</div>
+			<div class="blur">Пауза</div>
 			<div class="score-table col-sm-3">
 				<div class="title">Top Players</div>
 				<ul>
@@ -39,6 +41,20 @@
 						<span class="name"></span><span class="score"></span>
 					</li>
 				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="modal hide">
+		<div class="content">
+			<div class="row">
+				<h2 class="title">Сохраните свой результат!</h2>
+			</div>
+			<div class="row">
+				<input type="text" placeholder="Введите ваше имя..." class="form-control">
+			</div>
+			<div class="controls row">
+				<button class="save btn btn-primary ">Сохранить</button>
+				<button class="cancel btn btn-danger ">Отмена</button>
 			</div>
 		</div>
 	</div>

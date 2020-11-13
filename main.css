@@ -2,6 +2,7 @@
   height: 100vh;
 }
 .row {
+  width: 100%;
   justify-content: space-around;
   align-items: center;
 }
@@ -21,6 +22,7 @@
 }
 
 .main-screen {
+  position: relative;
   flex-wrap: nowrap;
   margin-top: 20px;
   height: 75%;
@@ -35,8 +37,62 @@
   height: 100%;
   cursor: pointer;
 }
+.blur {
+  display: none;
+}
+.blur.active {
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: white;
+}
 .cell {
   font-size: 0.5rem;
   align-items: center;
   text-align: center;
+}
+
+.modal.hide {
+  display: none;
+}
+.modal {
+  position: absolute;
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  align-items: center;
+  justify-content: center;
+}
+.modal h2 {
+  margin-bottom: 50px;
+}
+.modal .content {
+  width: 40%;
+  height: 50%;
+  background-color: #fff;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal input {
+  width: 60%;
+}
+.modal .controls {
+  width: 100%;
+  margin-top: 50px;
+  justify-content: space-around;
 }
