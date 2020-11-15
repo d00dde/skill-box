@@ -330,6 +330,6 @@ const game = new Game ({
 	blur: '.blur',
 	scoresList: '.scores-list',
 }, {
-	GAME_TIME: 1000,
+	GAME_TIME: 60000,
 	REFRESH_TIME: 400,
 });
