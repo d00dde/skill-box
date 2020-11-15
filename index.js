@@ -20,7 +20,7 @@ function formatTime(time) {
 
 // Класс TimerControl отвечает за управление таймерами игры
 class TimerControl {
-	constructor({GAME_TIME = 60000, REFRESH_TIME = 400}, domHelper) {
+	constructor({GAME_TIME = 60000, REFRESH_TIME = 400}, domHelper, endCallback) {
 		this.GAME_TIME = GAME_TIME;
 		this.REFRESH_TIME = REFRESH_TIME;
 		this.startTime = 0;
@@ -28,6 +28,7 @@ class TimerControl {
 		this.timeLeft = 0;
 		this.gameTimer = 0;
 		this.ticInterval = 0;
+		this.endCallback = endCallback;
 		this.domHelper = domHelper;
 		this.domHelper.setTimeLeft(GAME_TIME/1000);
 	}
@@ -36,25 +37,33 @@ class TimerControl {
 		clearTimeout(this.gameTimer);
 		clearInterval(this.ticInterval);
 	}
-	resume(endCallback, isStart){
+	resume(isStart){
 		isStart ? this.timeLeft = this.GAME_TIME : null;
 		this.startTime = Date.now();
 		this.endTime = this.startTime + this.timeLeft;
 		this.gameTimer = setTimeout(() => {
-			endCallback();
+			this.endCallback();
 		}, this.timeLeft);
 		this.ticInterval = setInterval (() => {
 			const toEnd  = this.endTime - Date.now();
 			this.domHelper.setTimeLeft(Math.round(toEnd/1000));
 		}, this.REFRESH_TIME);
 	}
+	addTime(time) {
+		clearTimeout(this.gameTimer);
+		this.endTime += time;
+		this.timeLeft = this.endTime - Date.now();
+		this.gameTimer = setTimeout(() => {
+			this.endCallback();
+		}, this.timeLeft);
+	}
 }
 
 // Класс DOMHelper отвечает за взаимодействие логики игры с элементами DOM
 class DOMHelper {
-	constructor ({ROW_MAX = 30, COL_MAX = 30, pause, newGame, scoreIndicator, timeCounter, gameField, blur, scoresList}) {
-		this.ROW_MAX = ROW_MAX;
-		this.COL_MAX = COL_MAX;
+	constructor ({BLOCK_WIDTH = 20, BLOCK_HEIGHT = 20, pause, newGame, scoreIndicator, timeCounter, gameField, blur, scoresList, typesLegend}) {
+		this.BLOCK_WIDTH = BLOCK_WIDTH;
+		this.BLOCK_HEIGHT = BLOCK_HEIGHT;
 		this.$pauseBtn = document.querySelector(pause);
 		this.$newGameBtn = document.querySelector(newGame);
 		this.$scoreIndicator = document.querySelector(scoreIndicator);
@@ -62,13 +71,14 @@ class DOMHelper {
 		this.$gameField = document.querySelector(gameField);
 		this.$blur = document.querySelector(blur);
 		this.$scoresList = document.querySelector(scoresList);
+		this.$typesLegend = document.querySelector(typesLegend);
 		this.$cells = null;
 	}
 	init(pauseHandler, newGameHandler, clickHandler) {
 		this.$pauseBtn.onclick = pauseHandler;
 		this.$newGameBtn.onclick = newGameHandler;
 		this.$gameField.onclick = clickHandler;
-		this.$pauseBtn.dataset.status = 'play';
+		this.$pauseBtn.disabled = true;
 		this.createField();
 		this.$cells = document.querySelectorAll('.cell');
 	}
@@ -95,13 +105,11 @@ class DOMHelper {
 			cell.style.backgroundColor = '';
 		});
 	}
-	changeMode(isRunning) {
+	toggleMode(isRunning) {
 		if(isRunning) {
-			this.$pauseBtn.innerText = 'Старт';
-			this.$pauseBtn.dataset.status = 'paused';
-		} else {
 			this.$pauseBtn.innerText = 'Пауза';
-			this.$pauseBtn.dataset.status = 'play';
+		} else {
+			this.$pauseBtn.innerText = 'Старт';
 		}
 	}
 	setScore(score) {this.$scoreIndicator.innerText = score}
@@ -110,14 +118,17 @@ class DOMHelper {
 	createField () {
 		this.$gameField.innerHTML = '';
 		const style = window.getComputedStyle(this.$gameField);
-		setCSS (                                                     // Блоки не имеют фиксированных размеров, а зависят от размера игрового поля, ROW_MAX и COL_MAX
-			`.cell {
-				width: ${Math.floor(parseInt(style.width))/this.COL_MAX}px;
-				height: ${Math.floor(parseInt(style.height))/this.ROW_MAX}px;
-			}`);
+		const cols = Math.floor(parseInt(style.width)/this.BLOCK_WIDTH);
+		const rows = Math.floor(parseInt(style.height)/this.BLOCK_HEIGHT);
+		setCSS(`
+		.cell{
+			width: ${this.BLOCK_WIDTH}px;
+			height: ${this.BLOCK_HEIGHT}px;
+		}
+		`)
 		let number = 0;
-		for(let i = 0; i < this.ROW_MAX; i++) {
-			for(let j = 0; j < this.COL_MAX; j++) {
+		for(let i = 0; i < cols; i++) {
+			for(let j = 0; j < rows; j++) {
 				const cell = document.createElement('div');
 				cell.classList.add('cell');
 				cell.dataset.id = number++;
@@ -140,6 +151,33 @@ class DOMHelper {
 			`;
 		}).join('');
 		this.$scoresList.innerHTML = content;
+	}
+	renderTypesLegend(types, getColor) {
+		const content = Object.keys(types).map((key) => {
+			return`
+				<li>
+					${types[key].description}
+				</li>
+			`;
+		}).join('');
+		this.$typesLegend.innerHTML = content;
+		let counter = 1;
+		const styles = Object.keys(types).map((key) => {
+			return `
+				.types-legend li:nth-child(${counter++}):before {
+					position: absolute;
+					content: '';
+					top: 50%;
+					transform: translateY(-50%);
+					left: -5px;
+					display: block;
+					width: ${this.BLOCK_WIDTH}px;
+					height: ${this.BLOCK_HEIGHT}px;
+					background-color: ${getColor(types[key])};
+				}
+			`;
+		}).join('');
+		setCSS(styles);
 	}
 }
 
@@ -192,6 +230,7 @@ class ScoreTable {
 		this.domHelper = domHelper;
 		this.currentScore = 0;
 		this.modal = new Modal(this.saveHandler.bind(this),	this.cancelHandler.bind(this),);
+		this.init();
 	}
 	init() {
 		this.domHelper.renderTopScores(this.getTopScores());
@@ -224,26 +263,86 @@ class ScoreTable {
 
 }
 
+// Класс Blocks отвечает за логику работы разных типов блоков
+class Blocks {
+	constructor ({ TYPES }, domHelper, timerControl) {
+		this.domHelper = domHelper;
+		this.timerControl = timerControl;
+		this.TYPES = TYPES;
+		this.init();
+	}
+	init() {
+		let counter = 0;
+		Object.keys(this.TYPES).forEach((key) => {
+			const type = this.TYPES[key];
+			type.numbers = [];
+			for (let i = 0; i < type.weight; i++) {
+				type.numbers.push(counter++);
+			}
+		});
+		this.sumWeight = counter;
+		this.domHelper.renderTypesLegend(this.TYPES, this.getDefaultColor.bind(this));
+	}
+	clickHandler(cell) {
+		return this[cell.dataset.type](cell);
+	}
+	getRandomType() {
+		const number = getRandom(0, this.sumWeight-1);
+		return this.TYPES[Object.keys(this.TYPES).find((key) => this.TYPES[key].numbers.includes(number))];
+	}
+	easyRemove(cell){
+		return this.hit(cell, this.TYPES.easyRemove);
+	}
+	hardRemove(cell){
+		return this.hit(cell, this.TYPES.hardRemove);
+	}
+	addTime(cell){
+		const isHit = this.hit(cell, this.TYPES.addTime);
+		if(isHit) {
+			this.timerControl.addTime(this.TYPES.addTime.time);
+		}
+		return isHit;
+	}
+	hit(cell, type){
+		if(type.hits === 1)
+			return type.points;
+		if(!cell.dataset.hits){
+			cell.dataset.hits = type.hits - 1;
+			cell.style.backgroundColor = type.colors[type.hits - 2];
+			return false;
+		};
+		if(cell.dataset.hits > 1) {
+			cell.dataset.hits = +cell.dataset.hits - 1;
+			cell.style.backgroundColor = type.colors[+cell.dataset.hits - 1];
+			return false;
+		}
+		return type.points;
+	}
+	getDefaultColor(type) {
+		return type.colors[type.colors.length - 1];
+	}
+}
+
 // Класс Game - основной класс, отвечает за логику игры и использование других классов
 class Game {
 	constructor(
-			{COLORS = ['blue'], START_ACTIVE_CELLS = 3, MAX_PAINTED_CELLS = 2},
+			{START_ACTIVE_CELLS = 3, MAX_PAINTED_CELLS = 2},
 			domHelperOptions,
 			timerControlOptions,
+			blocksOptions,
 			) {
-		this.COLORS = COLORS;
 		this.START_ACTIVE_CELLS = START_ACTIVE_CELLS;
 		this.MAX_PAINTED_CELLS = MAX_PAINTED_CELLS;
 		this.painted = 0;
 		this.currentScore = 0;
 		this.isRunning = false;
 		this.domHelper = new DOMHelper(domHelperOptions);
-		this.timerControl = new TimerControl(timerControlOptions, this.domHelper);
+		this.timerControl = new TimerControl(timerControlOptions, this.domHelper, this.endGame.bind(this));
 		this.scoreTable = new ScoreTable (this.domHelper);
+		this.blocks = new Blocks ( blocksOptions, this.domHelper, this.timerControl);
 		this.init();
 	}
 	init () {
-		this.scoreTable.init();
 		this.domHelper.init(
 			this.pauseHandler.bind(this),
 			this.startGame.bind(this),
@@ -252,7 +351,7 @@ class Game {
 	}
 	pauseHandler() {
 		this.isRunning ? this.pauseGame() : this.resumeGame();
-		this.domHelper.changeMode(this.isRunning);
+		this.domHelper.toggleMode(this.isRunning);
 	}
 	clickHandler (e) {
 		if(!this.isRunning)
@@ -262,11 +361,15 @@ class Game {
 		const cell = e.target;
 		if(!(cell.dataset.status === 'paint'))
 			return;
-		this.painted--;
-		this.domHelper.setScore(++this.currentScore);
-		cell.dataset.status === 'clear';
-		cell.style.backgroundColor = '';
-		this.paintRandomCells();
+		const points = this.blocks.clickHandler(cell);
+		if(points) {
+			this.currentScore += points;
+			this.domHelper.setScore(this.currentScore);
+			cell.dataset.status = 'clear';
+			cell.style.backgroundColor = '';
+			this.painted--;
+			this.paintRandomCells();
+		}
 	}
 	startGame() {
 		if(this.isRunning) // Нельзя начать новую игру пока текущая игра не окончена.
@@ -283,7 +386,7 @@ class Game {
 	}
 
 	resumeGame(isStart) {
-		this.timerControl.resume(this.endGame.bind(this), isStart);
+		this.timerControl.resume(isStart);
 		this.domHelper.resumeGame();
 		this.isRunning = true;
 	}
@@ -304,24 +407,24 @@ class Game {
 			while(true){
 				const candidate = this.domHelper.getRandomCell();
 				if(candidate.dataset.status === 'clear'){
-					candidate.style.backgroundColor = this.COLORS[getRandom(0, this.COLORS.length-1)];
-					this.painted++;
+					const type = this.blocks.getRandomType();
+					candidate.style.backgroundColor = this.blocks.getDefaultColor(type);
 					candidate.dataset.status = 'paint';
+					candidate.dataset.type = type.action;
+					this.painted++;
 					break;
 				}
 			}
 		}
 	}
-
 }
 
 const game = new Game ({
-	COLORS: [ '#E20338', '#1771F1', '#00CF91', '#F5E027'],
 	START_ACTIVE_CELLS: 3,
 	MAX_PAINTED_CELLS: 2,
 }, {
-	ROW_MAX: 30,
-	COL_MAX: 20,
+	BLOCK_WIDTH: 20,
+	BLOCK_HEIGHT: 20,
 	pause: '.start-btn',
 	newGame: '.new-game-btn',
 	scoreIndicator: '.current-score',
@@ -329,7 +432,36 @@ const game = new Game ({
 	gameField: '.game-field',
 	blur: '.blur',
 	scoresList: '.scores-list',
+	typesLegend: '.types-legend',
 }, {
 	GAME_TIME: 60000,
 	REFRESH_TIME: 400,
+}, {
+	TYPES : {
+		easyRemove : {
+			colors: ['#1771F1'],
+			action: 'easyRemove',
+			weight: 3,
+			points: 1,
+			hits: 1,
+			description: 'Убирается 1 кликом, даёт 1 очко',
+		},
+		addTime : {
+			colors: ['#00CF91'],
+			action: 'addTime',
+			points: 1,
+			weight: 1,
+			hits: 1,
+			time: 2000,
+			description: 'Убирается 1 кликом, даёт 1 очко и добавляет время',
+		},
+		hardRemove :{
+			colors: ['#FF6A61', '#EE3D48', '#B40A1B'],
+			action: 'hardRemove',
+			weight: 1,
+			points: 2,
+			hits: 3,
+			description: 'Убирается 3 кликами, даёт 2 очка',
+		},
+	}
 });
