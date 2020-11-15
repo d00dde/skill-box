@@ -75,8 +75,9 @@
   align-items: center;
   justify-content: center;
 }
-.modal h2 {
-  margin-bottom: 50px;
+
+.modal h3 {
+  text-align: center;
 }
 .modal .content {
   width: 40%;
@@ -90,8 +91,10 @@
 }
 
 .modal input {
+  margin-top: 25px;
   width: 60%;
 }
+
 .modal .controls {
   width: 100%;
   margin-top: 50px;

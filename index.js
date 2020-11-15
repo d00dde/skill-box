@@ -150,13 +150,20 @@ class Modal {
 		this.$input = this.$modal.querySelector('input');
 		this.$okBtn = this.$modal.querySelector('.save');
 		this.$cancelBtn = this.$modal.querySelector('.cancel');
+		this.$score = this.$modal.querySelector('.score');
 		this.okHandler = okHandler;
 		this.cancelHandler = cancelHandler;
 		this.$modal.onclick = this.cancel.bind(this); // Модальное окно закрывается при клике на затемнённую область.
 		this.$okBtn.onclick = this.ok.bind(this);
 	}
-	showModal(){
+	showModal(score){
+		this.$score.innerText = score;
 		this.$modal.classList.remove('hide');
+	}
+	hideModal() {
+		this.$input.value = '';
+		this.$score.innerText = '';
+		this.$modal.classList.add('hide');
 	}
 	ok() {
 		const value = this.$input.value;
@@ -164,20 +171,19 @@ class Modal {
 			console.log('Имя не должно быть пустым.'); // Ошибка ввода пользователем имени не обрабатывается.
 			return;
 		}
-		this.$input.value = '';
-		this.$modal.classList.add('hide');
+		this.hideModal();
 		this.okHandler(value);
 	}
 	cancel(e){
 		if(!e.target.classList.contains('cancel') && e.target.closest('.content'))
 			return;
-		this.$input.value = '';
-		this.$modal.classList.add('hide');
+		this.hideModal();
 		this.cancelHandler();
 	}
 	validate(value) { // Используется простая валидация введённого имени: имя не должно быть пустой строкой
 		return value !== ''
 	}
+
 }
 
 // Класс ScoreTable отвечает за логику работы таблицы рекордов и сохранение её в LocalStorage
@@ -192,7 +198,7 @@ class ScoreTable {
 	}
 	gameEnded(score) {
 		this.currentScore = score;
-		this.modal.showModal();
+		this.modal.showModal(score);
 	}
 	saveHandler(name) {
 		if(this.currentScore === 0)  // Нулевой счёт не записывается в таблицу рекордов.
