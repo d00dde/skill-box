@@ -107,17 +107,17 @@
   flex-direction: column;
   font-size: 1.5rem;
 }
-.score-table ul {
+.scores-list {
   list-style: decimal;
 }
-.score-table .name:after {
+.scores-list .name:after {
   content: ' :';
 }
-.score-table li:nth-child(1) {
+.scores-list li:nth-child(1) {
   position: relative;
   color: gold;
 }
-.score-table li:nth-child(1):after {
+.scores-list li:nth-child(1):after {
   position: absolute;
   top: 0;
   right: 0;
@@ -128,9 +128,31 @@
   background-image: url('/img/crown.png');
   background-size: cover;
 }
-.score-table li:nth-child(2) {
+.scores-list li:nth-child(2) {
   color: silver;
 }
-.score-table li:nth-child(3) {
+.scores-list li:nth-child(3) {
   color: #cd7f32;
+}
+.types-legend {
+  list-style: none;
+  font-size: 1rem;
+  padding: 0;
+  margin: 0;
+}
+.types-legend li {
+  padding-left: 25px;
+  margin: 10px 0;
+  position: relative;
+}
+.types-legend li:nth-child(1):before {
+  position: absolute;
+  content: '';
+  top: 50%;
+  transform: translateY(-50%);
+  left: -5px;
+  display: block;
+  width: 20px;
+  height: 20px;
+  background-color: red;
 }
