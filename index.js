@@ -1,3 +1,6 @@
+// Допущения в реализации, не указанные в ТЗ, отмечены комментариями в коде.
+
+// Утилиты (pure functions)
 
 function setCSS (css) {
 	const style = document.createElement('style');
@@ -8,7 +11,14 @@ function getRandom(min, max) {
 	let rand = min - 0.5 + Math.random() * (max - min + 1);
   return Math.round(rand);
 }
+function formatTime(time) {
+	const mins = Math.floor(time/60);
+	let seconds = time - mins*60;
+	seconds = seconds < 10 ? '0' + seconds : seconds;
+	return `${mins}:${seconds}`;
+}
 
+// Класс TimerControl отвечает за управление таймерами игры
 class TimerControl {
 	constructor({GAME_TIME = 60000, REFRESH_TIME = 400}, domHelper) {
 		this.GAME_TIME = GAME_TIME;
@@ -19,6 +29,7 @@ class TimerControl {
 		this.gameTimer = 0;
 		this.ticInterval = 0;
 		this.domHelper = domHelper;
+		this.domHelper.setTimeLeft(GAME_TIME/1000);
 	}
 	stop() {
 		this.timeLeft = this.endTime - Date.now();
@@ -38,6 +49,8 @@ class TimerControl {
 		}, this.REFRESH_TIME);
 	}
 }
+
+// Класс DOMHelper отвечает за взаимодействие логики игры с элементами DOM
 class DOMHelper {
 	constructor ({ROW_MAX = 30, COL_MAX = 30, pause, newGame, scoreIndicator, timeCounter, gameField, blur, scoresList}) {
 		this.ROW_MAX = ROW_MAX;
@@ -86,18 +99,18 @@ class DOMHelper {
 		if(isRunning) {
 			this.$pauseBtn.innerText = 'Старт';
 			this.$pauseBtn.dataset.status = 'paused';
-
 		} else {
 			this.$pauseBtn.innerText = 'Пауза';
 			this.$pauseBtn.dataset.status = 'play';
 		}
 	}
-	setScore(score) {this.$scoreIndicator.innerText = score;}
-	setTimeLeft(timeLeft) {this.$timeCounter.innerText = timeLeft;}
+	setScore(score) {this.$scoreIndicator.innerText = score}
+	setTimeLeft(timeLeft) {this.$timeCounter.innerText = formatTime(timeLeft)}
+
 	createField () {
 		this.$gameField.innerHTML = '';
 		const style = window.getComputedStyle(this.$gameField);
-		setCSS (
+		setCSS (                                                     // Блоки не имеют фиксированных размеров, а зависят от размера игрового поля, ROW_MAX и COL_MAX
 			`.cell {
 				width: ${Math.floor(parseInt(style.width))/this.COL_MAX}px;
 				height: ${Math.floor(parseInt(style.height))/this.ROW_MAX}px;
@@ -130,6 +143,7 @@ class DOMHelper {
 	}
 }
 
+// Класс Modal отвечает за отрисовку и реализацию логики работы модального окна
 class Modal {
 	constructor(okHandler, cancelHandler) {
 		this.$modal = document.querySelector('.modal');
@@ -138,7 +152,7 @@ class Modal {
 		this.$cancelBtn = this.$modal.querySelector('.cancel');
 		this.okHandler = okHandler;
 		this.cancelHandler = cancelHandler;
-		this.$modal.onclick = this.cancel.bind(this);
+		this.$modal.onclick = this.cancel.bind(this); // Модальное окно закрывается при клике на затемнённую область.
 		this.$okBtn.onclick = this.ok.bind(this);
 	}
 	showModal(){
@@ -147,7 +161,7 @@ class Modal {
 	ok() {
 		const value = this.$input.value;
 		if(!this.validate(value)) {
-			console.log('Имя не должно быть пустым.');
+			console.log('Имя не должно быть пустым.'); // Ошибка ввода пользователем имени не обрабатывается.
 			return;
 		}
 		this.$input.value = '';
@@ -161,10 +175,12 @@ class Modal {
 		this.$modal.classList.add('hide');
 		this.cancelHandler();
 	}
-	validate(value) {
+	validate(value) { // Используется простая валидация введённого имени: имя не должно быть пустой строкой
 		return value !== ''
 	}
 }
+
+// Класс ScoreTable отвечает за логику работы таблицы рекордов и сохранение её в LocalStorage
 class ScoreTable {
 	constructor(domHelper) {
 		this.domHelper = domHelper;
@@ -179,20 +195,20 @@ class ScoreTable {
 		this.modal.showModal();
 	}
 	saveHandler(name) {
-		if(this.currentScore === 0)
+		if(this.currentScore === 0)  // Нулевой счёт не записывается в таблицу рекордов.
 			return;
 		let topScores = this.getTopScores();
-		topScores.push({ name, score: this.currentScore});
+		topScores.push({ name, score: this.currentScore });
 		this.currentScore = 0;
 		topScores.sort((a, b) => {
 			return +a.score < +b.score;
 		});
-		topScores = topScores.slice(0, 10);
+		topScores = topScores.slice(0, 10); // Места более 10 не сохраняются в памяти.
 		this.domHelper.renderTopScores(topScores);
 		this.saveTopScores(topScores);
 	}
 
-	cancelHandler(){console.log('canceled');}
+	cancelHandler(){console.log('canceled');} // Отмена сохранения счёта не обрабатывается.
 	getTopScores() {
 		return JSON.parse(window.localStorage.getItem('topScores')) || [];
 	}
@@ -201,6 +217,8 @@ class ScoreTable {
 	}
 
 }
+
+// Класс Game - основной класс, отвечает за логику игры и использование других классов
 class Game {
 	constructor(
 			{COLORS = ['blue'], START_ACTIVE_CELLS = 3, MAX_PAINTED_CELLS = 2},
@@ -245,6 +263,8 @@ class Game {
 		this.paintRandomCells();
 	}
 	startGame() {
+		if(this.isRunning) // Нельзя начать новую игру пока текущая игра не окончена.
+			return;
 		this.clearGame();
 		this.domHelper.startGame();
 		this.paintRandomCells();
@@ -273,7 +293,7 @@ class Game {
 		this.painted = 0;
 	}
 	paintRandomCells() {
-		const count = this.painted ? getRandom(0, this.MAX_PAINTED_CELLS) : this.START_ACTIVE_CELLS;
+		const count = this.painted ? getRandom(0, this.MAX_PAINTED_CELLS) : this.START_ACTIVE_CELLS; // Игра начинается с 3-х блоков. Если в ходе игры игрок уберёт все блоки, то на игровое поле будет добавлено 3 блока. Это можно настроить изменив константу START_ACTIVE_CELLS в опциях.
 		for(let i = 0; i < count; i++){
 			while(true){
 				const candidate = this.domHelper.getRandomCell();
@@ -290,7 +310,7 @@ class Game {
 }
 
 const game = new Game ({
-	COLORS: [ 'red', 'blue'],
+	COLORS: [ '#E20338', '#1771F1', '#00CF91', '#F5E027'],
 	START_ACTIVE_CELLS: 3,
 	MAX_PAINTED_CELLS: 2,
 }, {
@@ -304,6 +324,6 @@ const game = new Game ({
 	blur: '.blur',
 	scoresList: '.scores-list',
 }, {
-	GAME_TIME: 2000,
+	GAME_TIME: 60000,
 	REFRESH_TIME: 400,
 });
