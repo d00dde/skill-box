@@ -260,7 +260,6 @@ class ScoreTable {
 	saveTopScores(scores) {
 		window.localStorage.setItem('topScores', JSON.stringify(scores));
 	}
-
 }
 
 // Класс Blocks отвечает за логику работы разных типов блоков
