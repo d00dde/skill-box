@@ -1,0 +1,33 @@
+{
+  "name": "skill-box",
+  "version": "1.0.0",
+  "description": "simple JS game \"Crash blocks\"",
+  "main": "index.js",
+  "scripts": {
+    "start" : "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/d00dde/skill-box.git"
+  },
+  "keywords": [
+    "JS",
+    "native",
+    "JS",
+    "express",
+    "mongoDB"
+  ],
+  "author": "Andrey Lopatko <d48564@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/d00dde/skill-box/issues"
+  },
+  "homepage": "https://github.com/d00dde/skill-box#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
