@@ -500,7 +500,7 @@ const game = new Game ({
 	scoresList: '.scores-list',
 	typesLegend: '.types-legend',
 }, {
-	GAME_TIME: 2000,
+	GAME_TIME: 60000,
 	REFRESH_TIME: 400,
 }, {
 	TYPES : {

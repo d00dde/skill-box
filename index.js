@@ -23,9 +23,13 @@ app.get('/results', (_, res) => {
 	}, DELAY);
 });
 app.post('/results', (req, res) => {
+	const { name, score } = req.body;
+	if(!validateResults(name, score)){
+		res.status(400).send({ message: 'Scores data is not a valid'});
+		return;
+	}
 	setTimeout(() => {
 		try {
-			const { name, score } = req.body;
 			let topScores = [];
 			if(fs.existsSync('database.json')) {
 				const fd = fs.readFileSync('database.json',"utf8");
@@ -56,3 +60,12 @@ app.get('*', (_, res) => {
 app.listen(PORT, () => {
   console.log(`Example app listening at http://localhost:${PORT}`);
 });
+
+function validateResults(name, score) {
+	console.log(score === 0 )
+	if(typeof name !== 'string' || name.length === 0)
+		return false;
+	if(!Number.isInteger(score) || score === 0)
+		return false;
+	return true;
+}
