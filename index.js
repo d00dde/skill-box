@@ -1,10 +1,13 @@
 const express = require('express');
 var cookieParser = require('cookie-parser');
 const path = require('path');
+const fs = require('fs');
 const PORT = require('./config').PORT;
 const { isAuth, login, logout } = require('./authorization');
 
 const app = express();
+const fd = fs.readFileSync('users.json', 'utf8');
+const USERS = JSON.parse(fd).users;
 
 app.use(express.static(path.join(__dirname, 'static')));
 app.use(express.json());
@@ -53,8 +56,7 @@ app.listen(PORT, () => {
 });
 
 function checkUser(email, password) {
-  const users = require('./users');
-  const user = users.find((item) => item.email === email);
+  const user = USERS.find((item) => item.email === email);
   if (!user) return null;
   if (user.password === password) return user;
   return null;

@@ -578,7 +578,7 @@ const game = new Game(
     logoutButton: '.logout-button',
   },
   {
-    GAME_TIME: 2000,
+    GAME_TIME: 60000,
     REFRESH_TIME: 400,
   },
   {
