@@ -1,0 +1,214 @@
+.container {
+  height: 100vh;
+}
+.row {
+  width: 100%;
+  justify-content: space-around;
+  align-items: center;
+}
+.user-info {
+  font-size: 2rem;
+}
+.user-info .user-name {
+  margin-right: 30px;
+}
+
+.panel {
+  height: 20%;
+}
+.panel .indicators {
+  font-size: 2rem;
+}
+.panel .time:before {
+  content: 'Время: ';
+}
+.panel .current-score:before {
+  content: 'Счёт: ';
+}
+.panel .rules p {
+  font-size: 1.1rem;
+}
+
+.main-screen {
+  position: relative;
+  flex-wrap: nowrap;
+  margin-top: 20px;
+  height: 72%;
+}
+.game-field {
+  display: flex;
+  flex-wrap: wrap;
+  border: 1px solid black;
+  box-sizing: content-box;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  cursor: pointer;
+}
+.main-screen .blur {
+  display: none;
+}
+.main-screen .blur.active {
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: white;
+}
+.game-field .cell {
+  font-size: 0.5rem;
+  align-items: center;
+  text-align: center;
+}
+
+.modal.hide {
+  display: none;
+}
+.modal {
+  position: absolute;
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  align-items: center;
+  justify-content: center;
+}
+
+.modal h3 {
+  text-align: center;
+}
+.modal .content {
+  width: 40%;
+  padding-top: 50px;
+  background-color: #fff;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal input {
+  margin-top: 25px;
+  width: 60%;
+}
+
+.modal .controls {
+  width: 100%;
+  margin-top: 50px;
+  justify-content: space-around;
+}
+.modal .message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.1rem;
+  min-height: 100px;
+}
+.score-table {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  font-size: 1.5rem;
+}
+.scores-list {
+  text-align: center;
+  padding: 15px 0;
+}
+.scores-list ul {
+  margin: 0;
+  text-align: left;
+  list-style: decimal;
+}
+.scores-list .name:after {
+  content: ' :';
+}
+.scores-list li:nth-child(1) {
+  position: relative;
+  color: gold;
+}
+.scores-list li:nth-child(1):after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  content: '';
+  display: block;
+  width: 25px;
+  height: 25px;
+  background-image: url('/img/crown.png');
+  background-size: cover;
+}
+.scores-list li:nth-child(2) {
+  color: silver;
+}
+.scores-list li:nth-child(3) {
+  color: #cd7f32;
+}
+.types-legend {
+  list-style: none;
+  font-size: 1rem;
+  padding: 0;
+  margin: 0;
+}
+.types-legend li {
+  padding-left: 25px;
+  margin: 10px 0;
+  position: relative;
+}
+.types-legend li:nth-child(1):before {
+  position: absolute;
+  content: '';
+  top: 50%;
+  transform: translateY(-50%);
+  left: -5px;
+  display: block;
+  width: 20px;
+  height: 20px;
+  background-color: red;
+}
+
+/*Loader*/
+
+.lds-ripple {
+  margin-top: 15px;
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.lds-ripple div {
+  position: absolute;
+  border: 4px solid #1771f1;
+  opacity: 1;
+  border-radius: 50%;
+  animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+.lds-ripple div:nth-child(2) {
+  animation-delay: -0.5s;
+}
+@keyframes lds-ripple {
+  0% {
+    top: 36px;
+    left: 36px;
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+  100% {
+    top: 0px;
+    left: 0px;
+    width: 72px;
+    height: 72px;
+    opacity: 0;
+  }
+}

@@ -1,0 +1,16 @@
+.auth-page {
+}
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 150px;
+}
+input {
+  margin: 10px;
+  min-width: 250px;
+}
+.message {
+  margin-top: 100px;
+}
