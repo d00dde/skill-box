@@ -1,0 +1,20 @@
+extends layout
+
+block css
+	link(rel="stylesheet", href="/css/auth.css")
+
+block content
+	div(class="container auth-page")
+		div(class="row mt-sm-2")
+			h1(class="display-4 col-sm-12 text-center") Игра "Убери кубики"
+			p(class="display-5 col-sm-12 text-center") Чтобы сыграть войдите или
+				a(href="#")  зарегистрируйтесь
+		div(class="row")
+			form(class="form col-sm-12 center")
+				input(class="form-control col-sm-4 email", type="email", value="admin@gmail.com")
+				input(class="form-control col-sm-4 password", type="password", value="admin",)
+				button(class="btn btn-primary", type="submit") Войти
+		div(class="row")
+			div(class="message display-5 col-sm-12 text-center")
+	script
+		include ../js/auth.js

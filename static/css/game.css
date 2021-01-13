@@ -6,6 +6,13 @@
   justify-content: space-around;
   align-items: center;
 }
+.user-info {
+  font-size: 2rem;
+}
+.user-info .user-name {
+  margin-right: 30px;
+}
+
 .panel {
   height: 20%;
 }
@@ -26,7 +33,7 @@
   position: relative;
   flex-wrap: nowrap;
   margin-top: 20px;
-  height: 75%;
+  height: 72%;
 }
 .game-field {
   display: flex;
