@@ -1,0 +1,26 @@
+.title {
+  position: relative;
+}
+.back {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+.logout {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+table {
+  border: 2px solid #333;
+}
+.info {
+  font-size: 1.2rem;
+}
+.info span:first-child {
+  font-weight: 700;
+}

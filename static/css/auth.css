@@ -1,0 +1,11 @@
+form {
+  margin-top: 150px;
+  text-align: center;
+}
+input {
+  margin: 20px;
+  min-width: 250px;
+}
+.message {
+  margin-top: 100px;
+}

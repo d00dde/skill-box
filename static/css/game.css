@@ -1,11 +1,27 @@
 .container {
   height: 100vh;
+  padding-top: 5px;
 }
 .row {
   width: 100%;
   justify-content: space-around;
   align-items: center;
 }
+.user-info {
+  font-size: 2rem;
+}
+.user-info .user-name {
+  cursor: pointer;
+  margin-right: 30px;
+  padding: 5px;
+  border-radius: 5px;
+  background-color: #4dd0e1;
+  color: #333;
+}
+.user-info .user-name:hover {
+  text-decoration: none;
+}
+
 .panel {
   height: 20%;
 }
@@ -26,7 +42,7 @@
   position: relative;
   flex-wrap: nowrap;
   margin-top: 20px;
-  height: 75%;
+  height: 72%;
 }
 .game-field {
   display: flex;

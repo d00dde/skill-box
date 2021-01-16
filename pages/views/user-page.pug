@@ -1,0 +1,44 @@
+extends layout
+
+block css
+	link(rel="stylesheet", href="/css/user-page.css")
+
+block content
+	div.container
+		.row.mt-sm-2.title
+			h1.display-4.col-sm-12.text-center Информация о игроке
+			button.btn.btn-dark.back(type="button")  &lt; Назад
+			button.btn.btn-warning.logout(type="button") Выйти
+		.row
+			.info
+				span Имя:&nbsp;
+				span #{user.name}
+		.row
+			.info
+				span Login:&nbsp;
+				span #{user.login}
+		.row
+			.info
+				span Дата регистрации:&nbsp;
+				span #{user.regDate.toLocaleDateString()} #{user.regDate.toLocaleTimeString()}
+		if !results.length
+			h3.text-center Результатов пока нет.
+		else
+			h3.text-center Результаты:
+			table.table.table-striped.col-lg-6.offset-3
+				thead.table-primary
+					tr
+						th(scope="col") #
+						th(scope="col") Счёт
+						th(scope="col") Дата
+						th(scope="col") Время
+				tbody
+					- let index = 1
+					each result in results
+						tr
+							th(scope="row") #{index++}
+							td=result.score
+							td=result.gameDate.toLocaleDateString()
+							td=result.gameDate.toLocaleTimeString()
+	script
+		include ../js/user-page.js
