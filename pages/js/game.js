@@ -1,5 +1,3 @@
-// Допущения в реализации, не указанные в ТЗ, отмечены комментариями в коде.
-
 // Утилиты (pure functions)
 
 function setCSS(css) {
@@ -114,7 +112,7 @@ class DOMHelper {
         method: 'POST',
       });
       if (response.status === 200) {
-        return window.location.replace(window.location.origin + '/game');
+        return window.location.replace(window.location.origin);
       }
       const data = await response.json();
       console.log(data.message);
@@ -175,7 +173,6 @@ class DOMHelper {
         cell.classList.add('cell');
         cell.dataset.id = number++;
         cell.dataset.status = 'clear';
-        // cell.textContent = number - 1;
         this.$gameField.appendChild(cell);
       }
     }
@@ -183,14 +180,14 @@ class DOMHelper {
   getRandomCell() {
     return this.$cells[getRandom(0, this.$cells.length - 1)];
   }
-  renderTopScores(scores) {
-    if (!scores.length) {
+  renderTopScores({ top10, best }) {
+    this.setUserBest(best);
+    if (!top10.length) {
       this.$scoresList.innerHTML = 'Чемпионов пока нет, можешь стать первым';
       return;
     }
     this.$scoresList.innerHTML = '';
-    this.setUserScore(scores);
-    const content = scores
+    const content = top10
       .map((item) => {
         return `
 				<li>
@@ -206,8 +203,7 @@ class DOMHelper {
 		</ul>
 		`;
   }
-  setUserScore(scores) {
-    const score = scores.find((user) => user.name === this.userName)?.score;
+  setUserBest(score) {
     this.$userTopScore.innerText = score || '0';
   }
   renderErrorTopScores(message) {

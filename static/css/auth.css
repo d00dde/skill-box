@@ -1,14 +1,9 @@
-.auth-page {
-}
 form {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   margin-top: 150px;
+  text-align: center;
 }
 input {
-  margin: 10px;
+  margin: 20px;
   min-width: 250px;
 }
 .message {

@@ -1,7 +1,7 @@
 const url = window.location.origin + '/login';
 
 const $form = document.querySelector('form');
-const $email = document.querySelector('.email');
+const $login = document.querySelector('.login');
 const $password = document.querySelector('.password');
 const $message = document.querySelector('.message');
 
@@ -13,7 +13,7 @@ $form.onsubmit = async (e) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      email: $email.value,
+      login: $login.value,
       password: $password.value,
     }),
   });
@@ -22,4 +22,5 @@ $form.onsubmit = async (e) => {
   }
   const data = await response.json();
   $message.textContent = data.message;
+  $password.value = '';
 };

@@ -1,19 +1,17 @@
 const maxAge = 3600000;
 module.exports = {
-  isAuth: (req) => {
-    if (req.cookies.auth === '42') return true;
-    return false;
-  },
-  login: (res, name) => {
-    res.cookie('auth', '42', {
+  isAuth: (req) => !!req.cookies.login,
+  getLogin: (req) => req.cookies.login,
+  logIn: (res, name, login) => {
+    res.cookie('name', name, {
       maxAge,
     });
-    res.cookie('name', name, {
+    res.cookie('login', login, {
       maxAge,
     });
   },
   logout: (res) => {
-    res.clearCookie('auth');
     res.clearCookie('name');
+    res.clearCookie('login');
   },
 };
