@@ -4,6 +4,7 @@ app.use('/', require('./routes/auth.router'));
 app.use('/register', require('./routes/register.router'));
 app.use('/results', require('./routes/results.router'));
 app.use('/user', require('./routes/user.router'));
+app.use('/admin', require('./routes/admin.router'));
 
 app.get('*', (_, res) => {
   res.status(404).render('no-found');

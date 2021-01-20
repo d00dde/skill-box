@@ -1,9 +1,8 @@
 body {
   height: 100vh;
-  font-size: 5rem;
-  padding-top: 15%;
 }
-div {
+.msg {
   width: 100%;
+  font-size: 3rem;
   text-align: center;
 }

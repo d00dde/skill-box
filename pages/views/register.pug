@@ -4,21 +4,20 @@ block css
 	link(rel="stylesheet", href="/css/register.css")
 
 block content
-	div.container
-		.row.mt-sm-2.title
-			h1.display-4.col-sm-12.text-center Регистрация нового игрока
-			button.btn.btn-dark.back(type="button") 	&lt; Назад
-		.row
-			form.form.col-sm-12.center
-				.row.login-control
-					input.form-control.col-sm-4.offset-4.login(type="text", value="johnlogin", placeholder="Введите ваш login", required)
-					button.btn.btn-info.check(type="button") Проверить
-					.check-img
-				input.form-control.col-sm-4.offset-4.name(type="text", value="John", placeholder="Введите ваше имя", required)
-				input.form-control.col-sm-4.offset-4.password(type="password", value="admin777", placeholder="Введите ваш пароль", required)
-				input.form-control.col-sm-4.offset-4.confirm-password(type="password", value="admin777", placeholder="Введите ваш пароль ещё раз", required)
-				button.btn.btn-primary(type="submit") Зарегистрироваться
-		.row
-			.message.display-5.col-sm-12.text-center
+	.row.mt-sm-2.title
+		h1.display-4.col-sm-12.text-center Регистрация нового игрока
+		button.btn.btn-dark.back(type="button") 	&lt; Назад
+	.row
+		form.form.col-sm-12.center
+			.row.login-control
+				input.form-control.col-sm-4.offset-4.login(type="text", value="johnlogin", placeholder="Введите ваш login", required)
+				button.btn.btn-info.check(type="button") Проверить
+				.check-img
+			input.form-control.col-sm-4.offset-4.name(type="text", value="John", placeholder="Введите ваше имя", required)
+			input.form-control.col-sm-4.offset-4.password(type="password", value="admin777", placeholder="Введите ваш пароль", required)
+			input.form-control.col-sm-4.offset-4.confirm-password(type="password", value="admin777", placeholder="Введите ваш пароль ещё раз", required)
+			button.btn.btn-primary(type="submit") Зарегистрироваться
+	.row
+		.message.display-5.col-sm-12.text-center
 	script
 		include ../js/register.js

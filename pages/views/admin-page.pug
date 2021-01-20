@@ -1,0 +1,31 @@
+extends layout
+
+block css
+	link(rel="stylesheet", href="/css/admin-page.css")
+
+block content
+	table.table.table-striped.col-lg-12
+				thead.table-primary
+					tr
+						th(scope="col") #
+						th(scope="col") ID
+						th(scope="col") Login
+						th(scope="col") Name
+						th(scope="col") Reg IP
+						th(scope="col") Reg Date
+						th(scope="col") Game count
+						th(scope="col") Top score
+				tbody
+					- let index = 1
+					each user in usersStatistic
+						tr
+							th(scope="row") #{index++}
+							td=user._id
+							td=user.login
+							td=user.name
+							td=user.regIp
+							td=user.regDate.toLocaleDateString()
+							td=user.gameCount
+							td=user.topScore
+	script
+		include ../js/admin-page.js

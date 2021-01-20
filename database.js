@@ -15,6 +15,7 @@ module.exports = {
     const user = new User({
       login,
       password: hashedPassword,
+      role: 'gamer',
       name,
       regIp,
       regDate: new Date(),
@@ -46,5 +47,17 @@ module.exports = {
     return results.map(({ score, gameDate }) => {
       return { score, gameDate };
     });
+  },
+  getUsersStatistic: async () => {
+    return [
+      { _id: '1', login: 'd00dde', name: 'Andrey', regIp: '127.0.0.1', regDate: new Date(), gameCount: 42,
+        topScore: 100},
+      { _id: '2', login: 'john', name: 'John', regIp: '127.0.0.2', regDate: new Date(), gameCount: 50,
+      topScore: 110},
+      { _id: '3', login: 'hunter', name: 'Mike', regIp: '127.0.0.3', regDate: new Date(), gameCount: 73,
+        topScore: 142},
+      { _id: '4', login: 'mad', name: 'Poly', regIp: '127.0.0.4', regDate: new Date(), gameCount: 7,
+      topScore: 92},
+    ];
   },
 };

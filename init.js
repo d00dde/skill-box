@@ -14,11 +14,11 @@ app.set('view engine', 'pug');
 
 (async function () {
   try {
-    mongoose.connect(mongoUri, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useCreateIndex: true,
-    });
+    // mongoose.connect(mongoUri, {
+    //   useNewUrlParser: true,
+    //   useUnifiedTopology: true,
+    //   useCreateIndex: true,
+    // });
     app.listen(PORT, () =>
       console.log(`App listening at http://localhost:${PORT} ...`),
     );

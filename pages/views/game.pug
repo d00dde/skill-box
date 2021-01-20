@@ -4,43 +4,42 @@ block css
 	link(rel="stylesheet", href="/css/game.css")
 
 block content
-	.container
-		.row.bg-light
-			.user-info.col-sm-11.text-center
-				a.user-name(href='/user')
-				span Лучший счёт:&nbsp;
-				span.user-top-score
-			button.btn.btn-warning.m-1.logout-button(type='button') Выйти
-		.panel.bg-light.row
-			.controls.col-sm-4
-				.row.bg-light
-					button.start-btn.col-sm-4.btn.btn-primary(disabled='') Пауза
-					button.new-game-btn.col-sm-4.btn.btn-primary Новая игра
-			.indicators.col-sm-5
-				.row
-					.time-counter.col-sm-4.offset-1.badge.badge-secondary
-					.current-score.col-sm-4.offset-1.badge.badge-secondary 0
-			.rules.col-sm-3.center
-				h2 Правила игры:
-				p Кликайте на цветные квадратики чтобы заработать как можно больше очков за оставшееся время.
-		.main-screen.row
-			.game-field.bg-light.col-sm-9
-			.score-table.bg-light.col-sm-3
-				.title.badge.badge-info 10 Лучших игроков:
-				.scores-list Типы блоков:
-				ul.types-legend
-			.blur Пауза
-		.modal.hide
-			.content
-				.title
-					h2 Сохраните свой результат!
-					h3
-						| Вы набрали:&nbsp;
-						span.score
-						|  очков.
-				.controls.row
-					button.save.btn.btn-primary Сохранить
-					button.cancel.btn.btn-danger Отмена
-				.message
+	.row.bg-light
+		.user-info.col-sm-11.text-center
+			a.user-name(href='/user')
+			span Лучший счёт:&nbsp;
+			span.user-top-score
+		button.btn.btn-warning.m-1.logout-button(type='button') Выйти
+	.panel.bg-light.row
+		.controls.col-sm-4
+			.row.bg-light
+				button.start-btn.col-sm-4.btn.btn-primary(disabled='') Пауза
+				button.new-game-btn.col-sm-4.btn.btn-primary Новая игра
+		.indicators.col-sm-5
+			.row
+				.time-counter.col-sm-4.offset-1.badge.badge-secondary
+				.current-score.col-sm-4.offset-1.badge.badge-secondary 0
+		.rules.col-sm-3.center
+			h2 Правила игры:
+			p Кликайте на цветные квадратики чтобы заработать как можно больше очков за оставшееся время.
+	.main-screen.row
+		.game-field.bg-light.col-sm-9
+		.score-table.bg-light.col-sm-3
+			.title.badge.badge-info 10 Лучших игроков:
+			.scores-list Типы блоков:
+			ul.types-legend
+		.blur Пауза
+	.modal.hide
+		.content
+			.title
+				h2 Сохраните свой результат!
+				h3
+					| Вы набрали:&nbsp;
+					span.score
+					|  очков.
+			.controls.row
+				button.save.btn.btn-primary Сохранить
+				button.cancel.btn.btn-danger Отмена
+			.message
 	script
 		include ../js/game.js
