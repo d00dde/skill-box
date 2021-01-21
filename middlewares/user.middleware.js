@@ -1,11 +1,10 @@
-const { isAuth, getLogin } = require('../authorization');
-const { getUser } = require('../database');
+const { isAuth, isAdmin } = require('../authorization');
 
 module.exports = async (req, res, next) => {
-  if (!isAuth(req)) return res.status(401).send({ message: 'Unauthorized' });
-  const email = getLogin(req);
-  const user = await getUser(email);
-  if (!user) return res.status(400).send({ message: 'Data is not a valid' });
-  req.user = user;
-  return next();
+  if (isAuth(req)) {
+    req.auth.isAuth = true;
+    req.auth.isAdmin = isAdmin(req);
+    return next();
+  }
+  return res.status(401).send({ message: 'Unauthorized' });
 };

@@ -74,9 +74,7 @@ class DOMHelper {
     blur,
     scoresList,
     typesLegend,
-    userName,
     userTopScore,
-    logoutButton,
   }) {
     this.BLOCK_WIDTH = BLOCK_WIDTH;
     this.BLOCK_HEIGHT = BLOCK_HEIGHT;
@@ -88,35 +86,16 @@ class DOMHelper {
     this.$blur = document.querySelector(blur);
     this.$scoresList = document.querySelector(scoresList);
     this.$typesLegend = document.querySelector(typesLegend);
-    this.$userName = document.querySelector(userName);
     this.$userTopScore = document.querySelector(userTopScore);
     this.$cells = null;
-    this.$logoutButton = document.querySelector(logoutButton);
-
-    this.userName = document.cookie.split(';').reduce((cookies, item) => {
-      const parsed = item.split('=');
-      cookies[parsed[0].trim()] = parsed[1];
-      return cookies;
-    }, {}).name;
   }
   init(pauseHandler, newGameHandler, clickHandler) {
     this.$pauseBtn.onclick = pauseHandler;
-    this.$userName.innerText = this.userName;
     this.$newGameBtn.onclick = newGameHandler;
     this.$gameField.onclick = clickHandler;
     this.$pauseBtn.disabled = true;
     this.createField();
     this.$cells = document.querySelectorAll('.cell');
-    this.$logoutButton.onclick = async () => {
-      const response = await fetch(window.location.origin + '/logout', {
-        method: 'POST',
-      });
-      if (response.status === 200) {
-        return window.location.replace(window.location.origin);
-      }
-      const data = await response.json();
-      console.log(data.message);
-    };
   }
   startGame() {
     this.$newGameBtn.disabled = true;
@@ -332,7 +311,7 @@ class ScoreTable {
     this.currentScore = score;
     this.modal.showModal(score);
   }
-  async saveHandler(name) {
+  async saveHandler() {
     if (this.currentScore === 0)
       // Нулевой счёт не записывается в таблицу рекордов.
       return;
@@ -569,9 +548,7 @@ const game = new Game(
     blur: '.blur',
     scoresList: '.scores-list',
     typesLegend: '.types-legend',
-    userName: '.user-name',
     userTopScore: '.user-top-score',
-    logoutButton: '.logout-button',
   },
   {
     GAME_TIME: 60000,

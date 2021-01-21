@@ -19,8 +19,11 @@ module.exports = {
       name,
       regIp,
       regDate: new Date(),
+      topScore: 0,
+      totalGames: 0,
     });
     await user.save();
+    return user;
   },
   getTop10: async () => {
     const results = await Result.find({}).sort({ score: -1 }).limit(10);
@@ -37,6 +40,9 @@ module.exports = {
       gameDate: new Date(),
     });
     await result.save();
+    user.totalGames++;
+    if (score > user.topScore) user.topScore = score;
+    await user.save();
   },
   getUserBest: async (userId) => {
     const results = await Result.find({ userId }).sort({ score: -1 }).limit(1);
@@ -48,16 +54,19 @@ module.exports = {
       return { score, gameDate };
     });
   },
-  getUsersStatistic: async () => {
-    return [
-      { _id: '1', login: 'd00dde', name: 'Andrey', regIp: '127.0.0.1', regDate: new Date(), gameCount: 42,
-        topScore: 100},
-      { _id: '2', login: 'john', name: 'John', regIp: '127.0.0.2', regDate: new Date(), gameCount: 50,
-      topScore: 110},
-      { _id: '3', login: 'hunter', name: 'Mike', regIp: '127.0.0.3', regDate: new Date(), gameCount: 73,
-        topScore: 142},
-      { _id: '4', login: 'mad', name: 'Poly', regIp: '127.0.0.4', regDate: new Date(), gameCount: 7,
-      topScore: 92},
+  getUsersStatistic: async (login = '', name = '') => {
+    const search = [
+      { login: { $regex: login, $options: 'i' } },
+      { name: { $regex: name, $options: 'i' } },
     ];
+    const sort = {
+      // topScore: -1
+    };
+    const users = await User.find({ $and: search }).sort(sort);
+    return users.map(
+      ({ _id, login, name, regIp, regDate, totalGames, topScore }) => {
+        return { _id, login, name, regIp, regDate, totalGames, topScore };
+      },
+    );
   },
 };

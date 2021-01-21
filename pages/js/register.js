@@ -1,6 +1,5 @@
 const url = window.location.origin + '/register';
 
-const $back = document.querySelector('.back');
 const $form = document.querySelector('form');
 const $login = document.querySelector('.login');
 const $name = document.querySelector('.name');
@@ -60,9 +59,6 @@ $checkBtn.onclick = async () => {
   } else {
     $checkImg.dataset.free = 'no';
   }
-};
-$back.onclick = () => {
-  window.location.replace(window.location.origin);
 };
 function validateForm() {
   $message.textContent = '';

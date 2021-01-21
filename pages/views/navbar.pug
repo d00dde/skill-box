@@ -2,12 +2,24 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light
 	.container-fluid
 		a.navbar-brand(href="/") Hit Cubes
 		div.collapse.navbar-collapse
-			ul.navbar-nav.me-auto.mb-2.mb-lg-0.mt-0
-				li.nav-item
-					a.nav-link.active(aria-current="page" href="/admin") Users Statistic
-				li.nav-item
-					a.nav-link(aria-current="page" href="/game") Game
-				li.nav-item
-					a.nav-link(aria-current="page" href="/register") Register
-				li.nav-item
-					a.btn.btn-outline-success(aria-current="page" href="/logout") Logout
+			ul.navbar-nav.mt-0
+				if auth.isAuth
+					li.nav-item
+						a.nav-link(aria-current="page" href="/game") Game
+					li.nav-item
+						a.nav-link(aria-current="page" href="/user") User Page
+					if auth.isAdmin
+						li.nav-item
+							a.nav-link(aria-current="page" href="/admin") Admin Page
+					if name
+						li.user-name #{name}
+						li.top-score
+							span Лучший результат:&nbsp;
+							span.user-top-score
+					li.nav-item.logout
+						a.btn.btn-outline-info(aria-current="page") Logout
+				else
+					li.nav-item
+						a.nav-link(aria-current="page" href="/") Log In
+					li.nav-item
+						a.nav-link(aria-current="page" href="/register") Register

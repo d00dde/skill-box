@@ -6,11 +6,16 @@ const router = Router();
 
 router.use(userMiddleware);
 router.get('', async (req, res) => {
-  const results = await getUserResults(req.user._id);
-  const { login, name, regDate } = req.user;
+  const { login, name, regDate, _id } = req.session.user;
+  const results = await getUserResults(_id);
   res.render('user-page', {
-    user: { login, name, regDate },
+    user: {
+      login,
+      name,
+      regDate: new Date(regDate),
+    },
     results,
+    auth: req.auth,
   });
 });
 

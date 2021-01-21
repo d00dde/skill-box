@@ -1,0 +1,29 @@
+# services:
+#   mongo_db:
+#     container_name: mongo_db
+#     image: mongo:latest
+#     environment:
+#       - PUID=1000
+#       - PGID=1000
+#     volumes:
+#       - /home/mongodb/database:/data/db
+#     restart: unless-stopped
+#   the_game:
+#     container_name: game
+#     build: .
+#     restart: always
+#     ports:
+#       - 9090:9090
+version: '3.8'
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - /home/mongodb/database:/data/db
+    ports:
+      - 27017:27017
+    restart: unless-stopped

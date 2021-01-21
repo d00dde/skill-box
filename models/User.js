@@ -7,6 +7,8 @@ const schema = new Schema({
   role: { type: String, required: true },
   regIp: { type: String, required: true },
   regDate: { type: Date, required: true },
+  topScore: { type: Number, required: true },
+  totalGames: { type: Number, required: true },
 });
 
 module.exports = model('User', schema);

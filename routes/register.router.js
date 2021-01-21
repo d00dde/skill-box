@@ -8,7 +8,7 @@ router.get('/', async (req, res) => {
   if (isAuth(req)) {
     return res.redirect('/game');
   }
-  res.render('register');
+  res.render('register', { auth: req.auth });
 });
 router.post('/check', async (req, res) => {
   const { login } = req.body;
@@ -22,10 +22,11 @@ router.post('/', async (req, res) => {
   const { login, password, name } = sanitize(req.body);
   if (!validateInput(login, password, name))
     return res.status(400).send({ message: 'Invalid register data' });
-  const user = await getUser(login);
-  if (user) return res.status(409).send({ message: 'This user already exist' });
-  await addUser(login, password, name, req.ip);
-  logIn(res, name, login);
+  const exist = await getUser(login);
+  if (exist)
+    return res.status(409).send({ message: 'This user already exist' });
+  const user = await addUser(login, password, name, req.ip);
+  logIn(req, user);
   return res.status(200).send({ message: 'Registration successful' });
 });
 

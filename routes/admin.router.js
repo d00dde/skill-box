@@ -6,9 +6,11 @@ const router = Router();
 
 router.use(adminMiddleware);
 router.get('', async (req, res) => {
-  const usersStatistic = await getUsersStatistic();
+  const { login, name } = req.query;
+  const usersStatistic = await getUsersStatistic(login, name);
   res.render('admin-page', {
     usersStatistic,
+    auth: req.auth,
   });
 });
 

@@ -7,14 +7,14 @@ const router = Router();
 router.use(userMiddleware);
 router.get('', async (req, res) => {
   const top10 = await getTop10();
-  const best = await getUserBest(req.user._id);
+  const best = await getUserBest(req.session.user._id);
   res.send({ top10, best });
 });
 router.post('', async (req, res) => {
   const { score } = req.body;
   if (!validateResults(score))
     return res.status(400).send({ message: 'Data is not a valid' });
-  await addResult(req.user.login, score);
+  await addResult(req.session.user.login, score);
   res.status(201).send({ message: 'Score saved' });
 });
 

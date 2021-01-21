@@ -4,28 +4,41 @@ block css
 	link(rel="stylesheet", href="/css/admin-page.css")
 
 block content
-	table.table.table-striped.col-lg-12
-				thead.table-primary
-					tr
-						th(scope="col") #
-						th(scope="col") ID
-						th(scope="col") Login
-						th(scope="col") Name
-						th(scope="col") Reg IP
-						th(scope="col") Reg Date
-						th(scope="col") Game count
-						th(scope="col") Top score
-				tbody
-					- let index = 1
-					each user in usersStatistic
+	.row
+		table.table.table-striped.col-lg-12
+					thead.table-primary
 						tr
-							th(scope="row") #{index++}
-							td=user._id
-							td=user.login
-							td=user.name
-							td=user.regIp
-							td=user.regDate.toLocaleDateString()
-							td=user.gameCount
-							td=user.topScore
+							th(scope="col") #
+							th(scope="col") ID
+							th(scope="col") Login
+							th(scope="col") Name
+							th(scope="col") Reg IP
+							th(scope="col") Reg Date
+							th(scope="col") Total games
+							th(scope="col") Top score
+					tbody
+						tr
+							th(scope="row")
+							td
+							td
+								input.form-control.login
+							td
+								input.form-control.name
+							td
+								button.btn.btn-primary.search Search
+							td
+							td user.totalGames
+							td user.topScore
+						- let index = 1
+						each user in usersStatistic
+							tr
+								th(scope="row") #{index++}
+								td=user._id
+								td=user.login
+								td=user.name
+								td=user.regIp
+								td=user.regDate.toLocaleDateString()
+								td=user.totalGames
+								td=user.topScore
 	script
 		include ../js/admin-page.js
