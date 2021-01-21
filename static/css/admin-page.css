@@ -1,3 +1,23 @@
 table {
   text-align: center;
 }
+.fill {
+  margin: 10px;
+}
+.limit {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.limit input {
+  max-width: 30%;
+}
+.pagination {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.page-number {
+  margin: 3px;
+}

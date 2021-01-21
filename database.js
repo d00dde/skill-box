@@ -54,19 +54,65 @@ module.exports = {
       return { score, gameDate };
     });
   },
-  getUsersStatistic: async (login = '', name = '') => {
+  getUsers: async (
+    login,
+    name,
+    gamesDirection,
+    topScoresDirection,
+    offset,
+    limit,
+  ) => {
     const search = [
       { login: { $regex: login, $options: 'i' } },
       { name: { $regex: name, $options: 'i' } },
     ];
-    const sort = {
-      // topScore: -1
-    };
-    const users = await User.find({ $and: search }).sort(sort);
+    const query = User.find({ $and: search });
+    if (+topScoresDirection) query.sort({ topScore: topScoresDirection });
+    if (+gamesDirection) query.sort({ totalGames: gamesDirection });
+    query.skip(+offset).limit(+limit);
+    users = await query;
     return users.map(
       ({ _id, login, name, regIp, regDate, totalGames, topScore }) => {
         return { _id, login, name, regIp, regDate, totalGames, topScore };
       },
     );
   },
+  getUsersLength: async (login, name, gamesDirection, topScoresDirection) => {
+    const search = [
+      { login: { $regex: login, $options: 'i' } },
+      { name: { $regex: name, $options: 'i' } },
+    ];
+    const query = User.find({ $and: search });
+    if (+topScoresDirection) query.sort({ topScore: topScoresDirection });
+    if (+gamesDirection) query.sort({ totalGames: gamesDirection });
+    users = await query;
+    return users.length;
+  },
+  setAdmin: async (_id) => {
+    const user = await User.findOne({ _id });
+    user.role = 'admin';
+    await user.save();
+  },
+
+  fillUsers: async () => {
+    const hashedPassword = await bcrypt.hash('admin777', 10);
+    for (let i = 0; i < 500; i++) {
+      const user = new User({
+        login: 'adminlogin' + i,
+        password: hashedPassword,
+        role: 'gamer',
+        name: 'John' + i,
+        regIp: `${gR(0, 255)}.${gR(0, 255)}.${gR(0, 255)}.${gR(0, 255)}`,
+        regDate: new Date(),
+        topScore: gR(0, 270),
+        totalGames: gR(0, 500),
+      });
+      await user.save();
+    }
+  },
 };
+
+function gR(min, max) {
+  let rand = min - 0.5 + Math.random() * (max - min + 1);
+  return Math.round(rand);
+}
