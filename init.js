@@ -1,10 +1,11 @@
+const path = require('path');
 const express = require('express');
 const mongoose = require('mongoose');
-var cookieParser = require('cookie-parser');
+const cookieParser = require('cookie-parser');
 const session = require('express-session');
-const path = require('path');
+const MongoDBStore = require('connect-mongodb-session')(session);
+const passport = require('./authorization/passport-config');
 const { PORT, mongoUri, secret, maxAge } = require('./config');
-const noAuth = require('./middlewares/no-auth.middleware');
 // const bureaucrat = require('./middlewares/bureaucrat.middleware');
 
 const app = express();
@@ -12,16 +13,26 @@ const app = express();
 app.use(express.static(path.join(__dirname, 'static')));
 app.use(express.json());
 app.use(cookieParser());
-app.use(noAuth);
 // app.use(bureaucrat(1000));
 app.use(
   session({
-    secret,
+    secret: secret,
+    store: new MongoDBStore({
+      uri: mongoUri,
+      collection: 'sessions',
+    }),
+    resave: false,
+    saveUninitialized: true,
     cookie: {
-      maxAge,
+      httpOnly: true,
+      path: '/',
+      maxAge: maxAge,
+      sameSite: 'lax',
     },
   }),
 );
+app.use(passport.initialize());
+app.use(passport.session());
 app.set('views', path.join(__dirname, 'pages/views'));
 app.set('view engine', 'pug');
 

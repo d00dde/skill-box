@@ -1,13 +1,14 @@
 const { Router } = require('express');
 const userMiddleware = require('../middlewares/user.middleware');
 const { getUserResults } = require('../database');
+const { getAuth } = require('../authorization');
 
 const router = Router();
 
 router.use(userMiddleware);
-router.get('', async (req, res) => {
-  const { login, name, regDate, _id } = req.session.user;
-  const results = await getUserResults(_id);
+router.get('', async (req, res, next) => {
+  const { login, name, regDate, _id } = req.session.passport.user;
+  const results = await getUserResults(next, _id);
   res.render('user-page', {
     user: {
       login,
@@ -15,7 +16,7 @@ router.get('', async (req, res) => {
       regDate: new Date(regDate),
     },
     results,
-    auth: req.auth,
+    auth: getAuth(req),
   });
 });
 

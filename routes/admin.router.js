@@ -1,5 +1,7 @@
 const { Router } = require('express');
 const adminMiddleware = require('../middlewares/admin.middleware');
+const { getAuth } = require('../authorization');
+
 const {
   getUsers,
   fillUsers,
@@ -10,7 +12,7 @@ const {
 const router = Router();
 
 router.use(adminMiddleware);
-router.get('', async (req, res) => {
+router.get('', async (req, res, next) => {
   const {
     login = '',
     name = '',
@@ -20,12 +22,14 @@ router.get('', async (req, res) => {
     limit = 10,
   } = req.query;
   const usersLength = await getUsersLength(
+    next,
     login,
     name,
     gamesDirection,
     topScoresDirection,
   );
   const queryUsers = await getUsers(
+    next,
     login,
     name,
     gamesDirection,
@@ -35,7 +39,7 @@ router.get('', async (req, res) => {
   );
   res.render('admin-page', {
     queryUsers,
-    auth: req.auth,
+    auth: getAuth(req),
     usersLength,
     search: {
       login,
@@ -47,12 +51,12 @@ router.get('', async (req, res) => {
     },
   });
 });
-router.post('/setAdmin', async (req, res) => {
-  await setAdmin(req.body.id);
+router.post('/setAdmin', async (req, res, next) => {
+  await setAdmin(next, req.body.id);
   res.json({ message: 'OK' });
 });
-router.post('/fill', async (req, res) => {
-  fillUsers();
+router.post('/fill', async (req, res, next) => {
+  fillUsers(next);
 });
 
 module.exports = router;
