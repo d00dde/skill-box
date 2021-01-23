@@ -1,0 +1,54 @@
+extends layout
+
+block css
+	link(rel="stylesheet", href="/css/admin-page.css")
+
+block content
+	button.btn.btn-danger.fill Fill DB Users
+	.row
+		table.table.table-striped.col-lg-12
+					thead.table-primary
+						tr
+							th(scope="col") #
+							th(scope="col") ID
+							th(scope="col") Login
+							th(scope="col") Name
+							th(scope="col") Reg IP
+							th(scope="col") Reg Date
+							th(scope="col") Total games
+							th(scope="col") Top score
+							th(scope="col")
+					tbody
+						tr
+							th(scope="row")
+							td.limit
+								span limit:&nbsp;
+								input.form-control(value=`${search.limit}`,data-users=`${usersLength}`,data-offset=`${search.offset}`)
+							td
+								input.form-control.login(value=`${search.login}`)
+							td
+								input.form-control.name(value=`${search.name}`)
+							td
+								button.btn.btn-primary.search Search
+							td
+							td
+								button.btn.btn-outline-secondary.sort-games(data-value=`${search.gamesDirection}`) &#8212;
+							td
+								button.btn.btn-outline-secondary.sort-top-scores(data-value=`${search.topScoresDirection}`) &#8212;
+							td
+						- let index = 1
+						each user in queryUsers
+							tr
+								th(scope="row") #{index++}
+								td=user._id
+								td=user.login
+								td=user.name
+								td=user.regIp
+								td=user.regDate.toLocaleDateString()
+								td=user.totalGames
+								td=user.topScore
+								td
+									button.btn.btn-warning.set-admin(data-id=`${user._id}`) +Rights
+		.pagination
+	script
+		include ../js/admin-page.js

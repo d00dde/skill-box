@@ -1,0 +1,43 @@
+form {
+  margin-top: 150px;
+  text-align: center;
+}
+input {
+  margin: 20px;
+  min-width: 250px;
+}
+.title {
+  position: relative;
+}
+.back {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+.message {
+  margin-top: 100px;
+}
+.login-control {
+  display: flex;
+  align-items: center;
+}
+.login-control input {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.check-img:before {
+  content: '';
+  display: block;
+  margin-left: 5px;
+  height: 36px;
+  width: 36px;
+  background-size: contain;
+}
+.check-img[data-free='yes']:before {
+  background-image: url('/img/yes.png');
+}
+.check-img[data-free='no']:before {
+  background-image: url('/img/no.png');
+}

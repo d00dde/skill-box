@@ -1,0 +1,19 @@
+extends layout
+
+block css
+	link(rel="stylesheet", href="/css/auth.css")
+
+block content
+	.row.mt-sm-2
+		h1.display-4.col-sm-12.text-center Игра "Убери кубики"
+		p.display-5.col-sm-12.text-center Чтобы сыграть войдите или
+			a(href="/register")  зарегистрируйтесь
+	.row
+		form.form.col-sm-12.center
+			input.form-control.col-sm-4.offset-4.login(type="text", value="adminlogin", placeholder="Введите ваш login", required)
+			input.form-control.col-sm-4.offset-4.password(type="password", value="admin777", placeholder="Введите ваш пароль", required)
+			button.btn.btn-primary(type="submit") Войти
+	.row
+		.message.display-5.col-sm-12.text-center
+	script
+		include ../js/auth.js
